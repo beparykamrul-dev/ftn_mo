@@ -1,0 +1,6 @@
+{
+  "name": "CaddyDash Pro",
+  "description": "Enterprise Caddy web server dashboard, real-time monitoring, cyber security suite, ecosystem glossary, and mobile Android app experience.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
