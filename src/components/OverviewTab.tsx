@@ -26,6 +26,8 @@ import {
 } from 'lucide-react';
 import { SiteConfig, ServerMetricPoint, CaddyAdminConfig, CyberThreatEvent, ResourceAlertThresholds } from '../types';
 import { ServerTelemetryRecharts } from './ServerTelemetryRecharts';
+import { InfrastructureAgentStatusPanel } from './InfrastructureAgentStatusPanel';
+import { TrafficHealthHeatmap } from './TrafficHealthHeatmap';
 
 interface OverviewTabProps {
   sites: SiteConfig[];
@@ -256,6 +258,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
 
       {/* 60-Minute Server Load, Memory & Throughput Recharts Component */}
       <ServerTelemetryRecharts currentMetrics={currentMetric} memoryMb={adminConfig.memoryAllocatedMb} />
+      
+      {/* Infrastructure Agents & Traffic Heatmap */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <InfrastructureAgentStatusPanel />
+        <TrafficHealthHeatmap />
+      </div>
 
       {/* Main Telemetry Chart & HTTP Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -191,3 +191,107 @@ export interface LogClusterGroup {
   statusCodes: number[];
   category: 'error' | 'security' | 'traffic';
 }
+
+// Infrastructure Agent Monitoring
+export type InfraAgentType = 'ansible' | 'kopia' | 'opensearch';
+export type InfraAgentStatus = 'healthy' | 'warning' | 'degraded' | 'restarting' | 'offline';
+
+export interface InfraAgent {
+  id: string;
+  name: string;
+  type: InfraAgentType;
+  version: string;
+  host: string;
+  status: InfraAgentStatus;
+  uptime: string;
+  lastPing: string;
+  details: {
+    // Ansible specific
+    managedNodes?: number;
+    unreachableNodes?: number;
+    lastPlaybookRun?: string;
+    playbookSuccessRate?: number;
+    // Kopia specific
+    snapshotRepoStatus?: 'connected' | 'syncing' | 'idle';
+    lastSnapshotTime?: string;
+    totalSnapshotsCount?: number;
+    backupSizeBytes?: number;
+    compressionRatio?: string;
+    nextScheduledSnapshot?: string;
+    // OpenSearch specific
+    clusterHealth?: 'green' | 'yellow' | 'red';
+    clusterName?: string;
+    activePrimaryShards?: number;
+    activeReplicaShards?: number;
+    indexingRateEps?: number;
+    jvmHeapPercent?: number;
+    totalNodes?: number;
+  };
+  restartCount: number;
+  isRestarting?: boolean;
+}
+
+// Traffic Health Heatmap (D3)
+export interface TrafficHealthCell {
+  id: string;
+  timeBucket: string;
+  timeLabel: string;
+  nodeName: string;
+  reqsPerSec: number;
+  latencyMs: number;
+  errorRatePercent: number;
+  anomalyScore: number; // 0.00 to 1.00
+  source: 'influxdb' | 'opensearch' | 'unified';
+  anomalyPattern?: string;
+  status: 'healthy' | 'elevated' | 'critical';
+}
+
+// Security Auditing (Ansible / Terraform / OSINT)
+export interface SecurityBenchmarkRule {
+  id: string;
+  framework: 'ansible' | 'terraform' | 'osint';
+  title: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  category: string;
+  description: string;
+  impact: string;
+  status: 'passed' | 'failed' | 'warning';
+  remediationSnippet: {
+    type: 'ansible_yaml' | 'terraform_hcl' | 'caddyfile';
+    title: string;
+    code: string;
+  };
+  applicableSites?: string[];
+  actionLabel: string;
+}
+
+// Censys Threat Intelligence
+export interface CensysExposedSubdomain {
+  subdomain: string;
+  ip: string;
+  asn: string;
+  asnOrg: string;
+  country: string;
+  countryCode: string;
+  openPorts: number[];
+  protocols: string[];
+  tlsVersion?: string;
+  certIssuer?: string;
+  certExpiration?: string;
+  threatRating: 'clean' | 'low' | 'medium' | 'high' | 'critical';
+  vulnerabilities: {
+    cveId: string;
+    title: string;
+    severity: string;
+  }[];
+}
+
+export interface CensysThreatIntelResult {
+  query: string;
+  scannedAt: string;
+  totalExposedAssets: number;
+  criticalVulnerabilities: number;
+  subdomains: CensysExposedSubdomain[];
+  recommendedMitigations: string[];
+  rawApiQuery: string;
+}

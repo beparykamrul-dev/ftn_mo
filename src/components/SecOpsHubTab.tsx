@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { InfrastructureTopologyGraph } from './InfrastructureTopologyGraph';
 import {
   Layers,
   Server,
@@ -607,7 +608,7 @@ export const SecOpsHubTab: React.FC<SecOpsHubTabProps> = ({
       {/* Hero Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <div className="text-[10px] uppercase tracking-[0.25em] text-cyan-500 font-mono font-bold">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-cyan-500 font-mono font-bold">
             INFRASTRUCTURE // SECOPS &amp; ECOSYSTEM CONTROL HUB
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white italic flex items-center gap-2">
@@ -632,6 +633,12 @@ export const SecOpsHubTab: React.FC<SecOpsHubTabProps> = ({
             <span>Sync All Daemons</span>
           </button>
         </div>
+      </div>
+
+      {/* Infrastructure Topology */}
+      <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6">
+        <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Infrastructure Topology</h2>
+        <InfrastructureTopologyGraph />
       </div>
 
       {/* Top Metrics Bento */}

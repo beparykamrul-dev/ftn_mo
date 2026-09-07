@@ -27,6 +27,8 @@ import {
   FileDown,
   Download
 } from 'lucide-react';
+import { SecurityAuditorTool } from './SecurityAuditorTool';
+import { CensysThreatIntelligenceWidget } from './CensysThreatIntelligenceWidget';
 import { CyberThreatEvent, SecurityScore, SiteConfig } from '../types';
 import { ThreatWorldMap } from './ThreatWorldMap';
 import { downloadSecurityReportJson, downloadSecurityReportCsv } from '../utils/securityReport';
@@ -50,7 +52,7 @@ export const CyberSecurityTab: React.FC<CyberSecurityTabProps> = ({
 }) => {
   const [selectedThreat, setSelectedThreat] = useState<CyberThreatEvent | null>(threatEvents[0] || null);
   const [newBlockedIp, setNewBlockedIp] = useState('');
-  const [activeSubSection, setActiveSubSection] = useState<'radar' | 'firewall' | 'headers' | 'tls'>('radar');
+  const [activeSubSection, setActiveSubSection] = useState<'radar' | 'firewall' | 'headers' | 'tls' | 'audit'>('radar');
   const [hardenedToast, setHardenedToast] = useState(false);
   const [downloadToast, setDownloadToast] = useState<string | null>(null);
   const [showReportMenu, setShowReportMenu] = useState(false);
@@ -280,6 +282,17 @@ export const CyberSecurityTab: React.FC<CyberSecurityTabProps> = ({
         >
           <ShieldCheck className={`w-3.5 h-3.5 ${activeSubSection === 'headers' ? 'text-black' : 'text-purple-400'}`} />
           <span>Security Headers Injector</span>
+        </button>
+        <button
+          onClick={() => setActiveSubSection('audit')}
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded transition ${
+            activeSubSection === 'audit'
+              ? 'bg-white text-black font-bold uppercase tracking-tighter shadow-sm'
+              : 'text-gray-400 hover:text-white font-mono uppercase tracking-wider bg-black border border-white/5'
+          }`}
+        >
+          <Terminal className={`w-3.5 h-3.5 ${activeSubSection === 'audit' ? 'text-black' : 'text-cyan-400'}`} />
+          <span>Security Audit & Censys Intel</span>
         </button>
       </div>
 
@@ -542,6 +555,14 @@ export const CyberSecurityTab: React.FC<CyberSecurityTabProps> = ({
               <p className="text-[10px] text-gray-500 font-sans">Hides Caddy engine details from port scanners and recon</p>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Sub-Section 4: Security Audit & Censys Intel */}
+      {activeSubSection === 'audit' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SecurityAuditorTool />
+          <CensysThreatIntelligenceWidget />
         </div>
       )}
     </div>
